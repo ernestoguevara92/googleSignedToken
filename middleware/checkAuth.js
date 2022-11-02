@@ -3,7 +3,7 @@ var jwkToPem = require('jwk-to-pem');
 var fetch = require('node-fetch');
 
 const checkAuth = async (req, res, next) => {
-    if (req.headers.authorization) {
+    if (req.headers.authorization && req.headers.authorization.split(' ')[0] === 'Bearer') {
         const token = req.headers.authorization.split(' ')[1];
          // split the token from the header
     // First need to find out which key id is being used, we can get this from the header
@@ -35,6 +35,9 @@ const checkAuth = async (req, res, next) => {
         else {
         res.status(401).send('Unauthorized');
         }
+    }
+    else {
+        return res.status(401).json({Error: "Unauthorized"});
     }
     
 };

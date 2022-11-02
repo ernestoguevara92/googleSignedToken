@@ -9,7 +9,7 @@ const { allStreetsController, streetNameController } = require('./controllers/st
 function setupServer(db) {
 
     // This is a test frontend - uncomment to check it out
-    // app.use(express.static('public'));
+    //app.use(express.static('public'));
     
     app.get('/info', checkAuth, infoController);
 
