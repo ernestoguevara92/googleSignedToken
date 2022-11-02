@@ -5,12 +5,14 @@
         <title>Full stack example with SQL database backend</title>
 
         <script>
+             let myParam = location.search.split('token=')[1]
 
          function getAddress(e) {
+            
              console.log(e.target.innerHTML);
              let streetName = encodeURI(e.target.innerHTML);
 
-             fetch(`streets/${streetName}`)
+             fetch(`streets/${streetName}`,{headers: { 'Authorization': `Bearer ${myParam}` }})
                  .then( response => {                     
                      return response.json();                     
                  })
@@ -29,27 +31,49 @@
          
          // no code should execute before loading of page
          window.addEventListener('load', () => {
-         
+           
              // here we get the list of streets in vancouver
              // that has bike racks available.
 
-             // we are going to use the fetch api (modern browsers only)
+                fetch('streets', { headers: { 'Authorization': `Bearer ${myParam}` } })
+                    .then( response => {
+                        return response.json();
+                    })
+                    .then( json => {
+                        console.log(json);
+                        let streets = document.querySelector('#streets');
+                        json.forEach( street => {
+                            let elem = document.createElement('div');
+                            elem.innerHTML = street.Name;
+                            elem.addEventListener('click', getAddress);
+                            streets.appendChild(elem);
+                        });
+                    });
 
-             fetch('streets')
-                 .then(function(response) {
-                     return response.json();
-                 })
-                 .then(function(json) {
-                     // modify DOM element
-                     let container = document.querySelector('#streets');
+            //  const request = new Request('streets', {
+            //      method: 'GET',
+            //      headers: requestHeaders,
+            //      mode: 'cors',
+            //      cache: 'default'
+            //  });
 
-                     json.forEach( street => {
-                         let elem = document.createElement('div');
-                         elem.innerHTML = street.Name;
-                         elem.addEventListener('click', getAddress);
-                         container.appendChild(elem);                         
-                     });
-                 }); 
+            //  // we are going to use the fetch api (modern browsers only)
+
+            //  fetch('streets')
+            //      .then(function(response) {
+            //          return response.json();
+            //      })
+            //      .then(function(json) {
+            //          // modify DOM element
+            //          let container = document.querySelector('#streets');
+
+            //          json.forEach( street => {
+            //              let elem = document.createElement('div');
+            //              elem.innerHTML = street.Name;
+            //              elem.addEventListener('click', getAddress);
+            //              container.appendChild(elem);                         
+            //          });
+            //      }); 
          });
 
          

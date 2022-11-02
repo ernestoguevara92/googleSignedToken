@@ -1,6 +1,7 @@
 const sqlite3 = require('sqlite3');
 const sqlite = require('sqlite');
 const express = require('express');
+const cors = require('cors');
 const app = express();
 const infoController = require('./controllers/infoController');
 const checkAuth = require('./middleware/checkAuth');
@@ -9,7 +10,8 @@ const { allStreetsController, streetNameController } = require('./controllers/st
 function setupServer(db) {
 
     // This is a test frontend - uncomment to check it out
-    //app.use(express.static('public'));
+    app.use(express.static('public'));
+    app.use(cors());
     
     app.get('/info', checkAuth, infoController);
 
